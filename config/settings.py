@@ -131,6 +131,6 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_URL = 'cuentas:login'  # O 'cuentas:login' según el name que le hayas puesto en cuentas/urls.py
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'cuentas:login'
+LOGOUT_REDIRECT_URL = 'login'
