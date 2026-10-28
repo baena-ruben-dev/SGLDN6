@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Legajo de {{ docente.apellido }}, {{ docente.nombre }} — SGLD{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 850px;">
+    
+    <!-- Tarjeta de Datos Personales -->
+    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-3">
+                <h2 class="fw-bold text-dark mb-0">{{ docente.apellido }}, {{ docente.nombre }}</h2>
+                <span class="badge {% if docente.estado == 'ACTIVO' %}bg-success{% elif docente.estado == 'EN_REVISION' %}bg-warning text-dark{% else %}bg-secondary{% endif %} fs-6">
+                    {{ docente.get_estado_display }}
+                </span>
+            </div>
+            <a href="{% url 'docente_list' %}" class="btn btn-outline-secondary btn-sm">← Volver al listado</a>
+        </div>
+
+        <div class="mb-3">
+            <a href="{% url 'docente_update' docente.pk %}" class="btn btn-warning btn-sm fw-bold">✏️ Editar Datos</a>
+        </div>
+
+         <div class="d-flex gap-2 mb-4">
+            <a href="{% url 'exportar_legajo_pdf' docente.pk %}" target="_blank" class="btn btn-danger btn-sm fw-bold">📥 Descargar Ficha PDF</a>
+        </div>
+
+        <hr class="text-muted">
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <p class="text-muted mb-1 small">Tipo y Número de Documento</p>
+                <p class="fw-semibold fs-6">{{ docente.tipo_documento }}: {{ docente.numero_documento }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted mb-1 small">CUIL</p>
+                <p class="fw-semibold fs-6">{{ docente.cuil }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted mb-1 small">Correo Electrónico Institucional</p>
+                <p class="fw-semibold fs-6">{{ docente.email }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted mb-1 small">Teléfono de Contacto</p>
+                <p class="fw-semibold fs-6">{{ docente.telefono|default:"No especificado" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted mb-1 small">Fecha de Nacimiento</p>
+                <p class="fw-semibold fs-6">{{ docente.fecha_nacimiento|default:"No especificada" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted mb-1 small">Fecha de Alta en el Sistema</p>
+                <p class="fw-semibold fs-6">{{ docente.created_at|date:"d/m/Y H:i" }}</p>
+            </div>
+        </div>
+    </div>
+
+<!-- Sección de Cargos y Horas Cátedra (Normativa CABA) -->
+<div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold text-dark mb-0">📚 Cargos y Horas Cátedra (CABA)</h4>
+        <a href="{% url 'cargo_create' docente.id %}" class="btn btn-sm btn-outline-success fw-bold">+ Asignar Cargo</a>
+    </div>
+
+    {% if docente.cargos.all %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+    <thead class="table-light">
+        <tr>
+            <th>Tipo de Cargo</th>
+            <th>Espacio Curricular / Materia</th>
+            <th>Horas</th>
+            <th>Condición</th>
+            <th>Turno</th>
+            <th class="text-end">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cargo in docente.cargos.all %}
+        <tr>
+            <td><span class="badge bg-primary">{{ cargo.get_tipo_cargo_display }}</span></td>
+            <td class="fw-bold">{{ cargo.espacio_curricular }}</td>
+            <td>{{ cargo.horas_catedra }} hs</td>
+            <td>{{ cargo.get_condicion_display }}</td>
+            <td>{{ cargo.get_turno_display }}</td>
+            <td class="text-end">
+                <a href="{% url 'cargo_update' cargo.pk %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                <a href="{% url 'cargo_delete' cargo.pk %}" class="btn btn-sm btn-outline-danger">Borrar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">Este docente aún no tiene cargos ni horas cátedra asignadas en la institución.</p>
+    {% endif %}
+</div>
+
+<!-- Tarjeta de Legajo Digital / Documentos Adjuntos -->
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold text-dark mb-0">📁 Legajo Digital / Documentación</h4>
+            <a href="{% url 'documento_create' docente.pk %}" class="btn btn-primary btn-sm fw-bold">+ Adjuntar Documento</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 35%;">Descripción</th>
+                        <th style="width: 25%;">Tipo</th>
+                        <th style="width: 20%;">Fecha Subida</th>
+                        <th style="width: 20%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in docente.documentos.all %}
+                    <tr>
+                        <td class="fw-semibold">{{ doc.titulo }}</td>
+                        <td><span class="badge bg-secondary">{{ doc.get_tipo_display }}</span></td>
+                        <td class="small text-muted">{{ doc.fecha_subida|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <!-- Botón Ver en nueva pestaña -->
+                                <a href="{{ doc.archivo.url }}" target="_blank" class="btn btn-sm btn-outline-primary fw-bold" title="Ver documento">
+                                    📄 Ver
+                                </a>
+                                <!-- Botón Descargar forzada con el atributo download -->
+                                <a href="{{ doc.archivo.url }}" download class="btn btn-sm btn-outline-success fw-bold" title="Descargar archivo">
+                                    📥 Descargar
+                                </a>
+                                <!-- Botón Eliminar -->
+                                <a href="{% url 'documento_delete' doc.pk %}" class="btn btn-sm btn-outline-danger fw-bold" title="Eliminar documento">
+                                    🗑️
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted">No hay documentos adjuntos en el legajo de este docente.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Adjuntar Documento — SGLD{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h3 class="h5 fw-bold text-primary mb-1">Adjuntar Documento al Legajo</h3>
+        <p class="text-muted small mb-4">Docente: <strong>{{ docente.apellido }}, {{ docente.nombre }}</strong></p>
+
+        <!-- enctype="multipart/form-data" es OBLIGATORIO para subir archivos -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'docente_detail' docente.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4 fw-bold">Subir Documento</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

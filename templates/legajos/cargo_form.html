@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Asignar Cargo — SGLD{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h3 class="fw-bold text-primary mb-3">📌 Asignar Nuevo Cargo / Horas Cátedra</h3>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <div class="d-flex justify-content-between mt-4">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-success fw-bold px-4">Guardar Cargo</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

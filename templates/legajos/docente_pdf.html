@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Legajo de {{ docente.apellido }}, {{ docente.nombre }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #fff; color: #000; font-family: Arial, sans-serif; padding: 30px; }
+        .header-sistema { font-size: 13px; color: #6c757d; margin-bottom: 5px; }
+        .titulo-ficha { font-size: 24px; font-weight: bold; color: #1a365d; margin-bottom: 25px; }
+        .table-custom th { width: 30%; background-color: #f8f9fa !important; color: #333; }
+        .section-title { font-size: 18px; font-weight: bold; margin-top: 30px; margin-bottom: 15px; color: #1a365d; }
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="header-sistema">Sistema de Gestión de Legajos Docentes (SGLD)</div>
+        <div class="titulo-ficha">Ficha de Legajo Institucional</div>
+
+        <!-- Tabla de Datos Personales -->
+        <table class="table table-bordered table-custom">
+            <tr>
+                <th>Apellido y Nombre:</th>
+                <td>{{ docente.apellido }}, {{ docente.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Documento:</th>
+                <td>{{ docente.tipo_documento }}: {{ docente.numero_documento }}</td>
+            </tr>
+            <tr>
+                <th>CUIL:</th>
+                <td>{{ docente.cuil|default:"No especificado" }}</td>
+            </tr>
+            <tr>
+                <th>Email Institucional:</th>
+                <td>{{ docente.email }}</td>
+            </tr>
+            <tr>
+                <th>Teléfono:</th>
+                <td>{{ docente.telefono|default:"No especificado" }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Nacimiento:</th>
+                <td>{{ docente.fecha_nacimiento|default:"No especificado" }}</td>
+            </tr>
+            <tr>
+                <th>Estado Actual:</th>
+                <td>{{ docente.estado|default:"Activo" }}</td>
+            </tr>
+        </table>
+
+        <!-- Listado de Documentación -->
+        <div class="section-title">Listado de Documentación Digital Adjunta en Legajo:</div>
+        
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Descripción / Título</th>
+                    <th>Tipo</th>
+                    <th>Fecha de Subida</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if documentos %}
+                    {% for doc in documentos %}
+                    <tr>
+                        <td>{{ doc.titulo }}</td>
+                        <td>{{ doc.tipo_documento|default:"Documento" }}</td>
+                        <td>{{ doc.fecha_subida|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">No hay documentación digital adjunta registrada.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Botón de Impresión (Se oculta al imprimir) -->
+        <div class="text-center mt-4 no-print">
+            <button onclick="window.print()" class="btn btn-primary btn-lg px-5">🖨️ Imprimir / Guardar como PDF</button>
+            <a href="{% url 'docente_detail' docente.pk %}" class="btn btn-secondary btn-lg ms-3">Volver al Legajo</a>
+        </div>
+    </div>
+
+</body>
+</html>
