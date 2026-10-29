@@ -1,7 +1,6 @@
 import os
 import django
 
-# Configurar el entorno de Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -14,10 +13,14 @@ EMAIL = 'admin@escuela.com'
 PASSWORD = 'adminpassword123'
 
 try:
-    if not User.objects.filter(username=USERNAME).exists():
-        User.objects.create_superuser(username=USERNAME, email=EMAIL, password=PASSWORD)
+    user, created = User.objects.get_or_create(username=USERNAME, defaults={'email': EMAIL})
+    user.set_password(PASSWORD)
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+    if created:
         print(f"Superusuario '{USERNAME}' creado con éxito.")
     else:
-        print(f"El usuario '{USERNAME}' ya existe en la base de datos.")
+        print(f"Superusuario '{USERNAME}' ya existía, contraseña actualizada correctamente.")
 except Exception as e:
-    print(f"Aviso al crear superusuario: {e}")
+    print(f"Aviso al configurar superusuario: {e}")
