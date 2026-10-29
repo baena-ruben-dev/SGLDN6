@@ -8,7 +8,8 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-USERNAME = 'admin'
+# Usamos el correo como username para que coincida con tu formulario
+USERNAME = 'admin@escuela.com'
 EMAIL = 'admin@escuela.com'
 PASSWORD = 'adminpassword123'
 
