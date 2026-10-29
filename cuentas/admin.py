@@ -6,7 +6,7 @@ class CustomUserAdmin(UserAdmin):
     model = Usuario
     # Definimos qué columnas se ven en la lista
     list_display = ('email', 'apellido', 'nombre', 'rol', 'is_active', 'is_staff')
-    list_filter = ('rol', 'is_active', 'is_staff')
+    list_filter = ('rol', 'activo', 'is_staff')
     search_fields = ('email', 'nombre', 'apellido')
     ordering = ('email',)
     
