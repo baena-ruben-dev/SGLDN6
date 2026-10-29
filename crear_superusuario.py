@@ -12,10 +12,14 @@ USERNAME = 'admin@escuela.com'
 EMAIL = 'admin@escuela.com'
 PASSWORD = 'adminpassword123'
 
-# Si el usuario ya existe, lo eliminamos para crearlo limpio y con la contraseña bien encriptada
-if User.objects.filter(username=USERNAME).exists():
-    User.objects.filter(username=USERNAME).delete()
+# Buscamos si ya existe, si no existe lo creamos, y si existe le actualizamos la clave de forma segura
+user, created = User.objects.get_or_create(username=USERNAME, defaults={'email': EMAIL})
+user.set_password(PASSWORD)
+user.is_superuser = True
+user.is_staff = True
+user.save()
 
-# Creamos el superusuario oficial de Django
-User.objects.create_superuser(username=USERNAME, email=EMAIL, password=PASSWORD)
-print(f"Superusuario '{USERNAME}' creado y blanqueado con éxito.")
+if created:
+    print(f"Superusuario '{USERNAME}' creado con éxito.")
+else:
+    print(f"Superusuario '{USERNAME}' ya existía, contraseña actualizada correctamente.")
