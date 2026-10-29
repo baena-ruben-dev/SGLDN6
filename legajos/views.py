@@ -8,6 +8,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from .models import Docente, Documento, CargoDocente
 from .forms import DocenteForm, DocumentoForm, CargoForm
+from django.db.models import Q
 
 class DocenteListView(LoginRequiredMixin, ListView):
     model = Docente
@@ -16,6 +17,16 @@ class DocenteListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        # 1. Filtro de búsqueda por DNI, nombre o apellido
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            queryset = queryset.filter(
+                Q(numero_documento__icontains=q) |
+                Q(nombre__icontains=q) |
+                Q(apellido__icontains=q)
+            )
+
         estado = self.request.GET.get('estado')
         if estado:
             # Manejo flexible por si el estado tiene espacio o guion bajo en la BD
@@ -50,17 +61,17 @@ class DocumentoCreateView(LoginRequiredMixin, CreateView):
     template_name = 'legajos/documento_form.html'
 
     def form_valid(self, form):
-        docente = get_object_or_404(Docente, pk=self.kwargs['docente_id'])
+        docente = get_object_or_404(Docente, pk=self.kwargs['pk'])
         form.instance.docente = docente
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['docente'] = get_object_or_404(Docente, pk=self.kwargs['docente_id'])
+        context['docente'] = get_object_or_404(Docente, pk=self.kwargs['pk'])
         return context
 
     def get_success_url(self):
-        return reverse('docente_detail', kwargs={'pk': self.kwargs['docente_id']})
+        return reverse('docente_detail', kwargs={'pk': self.kwargs['pk']})
 
 class DocumentoDeleteView(LoginRequiredMixin, DeleteView):
     model = Documento
@@ -75,18 +86,18 @@ class CargoCreateView(LoginRequiredMixin, CreateView):
     template_name = 'legajos/cargo_form.html'
 
     def form_valid(self, form):
-        docente = get_object_or_404(Docente, pk=self.kwargs['docente_id'])
+        docente = get_object_or_404(Docente, pk=self.kwargs['pk'])
         form.instance.docente = docente
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['docente'] = get_object_or_404(Docente, pk=self.kwargs['docente_id'])
+        context['docente'] = get_object_or_404(Docente, pk=self.kwargs['pk'])
         return context
 
     def get_success_url(self):
-        return reverse('docente_detail', kwargs={'pk': self.kwargs['docente_id']})
-
+        return reverse('docente_detail', kwargs={'pk': self.kwargs['pk']})
+    
 class CargoUpdateView(LoginRequiredMixin, UpdateView):
     model = CargoDocente
     form_class = CargoForm
