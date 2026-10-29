@@ -9,21 +9,34 @@ try:
     from django.contrib.auth import get_user_model
 
     User = get_user_model()
-    USERNAME = 'admin@escuela.com'
     EMAIL = 'admin@escuela.com'
     PASSWORD = 'adminpassword123'
 
-    user, created = User.objects.get_or_create(username=USERNAME, defaults={'email': EMAIL})
-    user.set_password(PASSWORD)
-    user.is_superuser = True
-    user.is_staff = True
-    user.save()
+    # Buscamos por email y pasamos nombre y apellido que son obligatorios en tu modelo
+    user, created = User.objects.get_or_create(
+        email=EMAIL,
+        defaults={
+            'nombre': 'Administrador',
+            'apellido': 'Sistema',
+            'rol': 'SUPERADMIN',
+            'is_staff': True,
+            'is_superuser': True,
+            'debe_cambiar_password': False,
+            'activo': True
+        }
+    )
     
+    # Aseguramos la contraseña cifrada correctamente y privilegios de admin
+    user.set_password(PASSWORD)
+    user.is_staff = True
+    user.is_superuser = True
+    user.activo = True
+    user.save()
+
     if created:
-        print(f"Superusuario '{USERNAME}' creado con éxito.")
+        print(f"Superusuario '{EMAIL}' creado con éxito.")
     else:
-        print(f"Superusuario '{USERNAME}' ya existía, contraseña actualizada.")
+        print(f"Superusuario '{EMAIL}' ya existía, contraseña actualizada.")
         
 except Exception as e:
-    print(f"Aviso en script de superusuario: {e}")
-    sys.exit(0)  # Evita que falle el build si ocurre un imprevisto
+    print(f"Error al configurar superusuario: {e}")
