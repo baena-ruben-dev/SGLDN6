@@ -2,7 +2,9 @@
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
+
 from .forms import CustomAuthenticationForm
+
 
 class CustomLoginView(LoginView):
     template_name = 'cuentas/login.html'
@@ -18,6 +20,7 @@ class CustomLogoutView(LogoutView):
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+
 
 @login_required
 def dashboard(request):
