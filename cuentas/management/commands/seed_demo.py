@@ -1,5 +1,6 @@
-from django.core.management.base import BaseCommand
 from cuentas.models import Usuario
+from django.core.management.base import BaseCommand
+
 
 class Command(BaseCommand):
     help = 'Crea usuarios de demostración para cada rol institucional'
@@ -8,11 +9,11 @@ class Command(BaseCommand):
         self.stdout.write("Creando usuarios de prueba...")
 
         usuarios_data = [
-            {'email': 'superadmin@institucion.edu.ar', 'nombre': 'Ana', 'apellido': 'Admin', 'rol': 'SUPERADMIN'},
-            {'email': 'rector@institucion.edu.ar', 'nombre': 'Carlos', 'apellido': 'Rector', 'rol': 'RECTOR'},
-            {'email': 'secretaria@institucion.edu.ar', 'nombre': 'María', 'apellido': 'Secretaria', 'rol': 'SECRETARIA'},
+            {'email': 'superadmin@institucion.edu.ar', 'nombre': 'Baena', 'apellido': 'Admin', 'rol': 'SUPERADMIN'},
+            {'email': 'rector@institucion.edu.ar', 'nombre': 'Guillermo', 'apellido': 'Rector', 'rol': 'RECTOR'},
+            {'email': 'secretaria@institucion.edu.ar', 'nombre': 'Sonia', 'apellido': 'Secretaria', 'rol': 'SECRETARIA'},
             {'email': 'prosecretario@institucion.edu.ar', 'nombre': 'Jorge', 'apellido': 'Prosecretario', 'rol': 'PROSECRETARIO'},
-            {'email': 'administrativo@institucion.edu.ar', 'nombre': 'Lucía', 'apellido': 'Administrativa', 'rol': 'ADMINISTRATIVO'},
+            {'email': 'administrativo@institucion.edu.ar', 'nombre': 'Pablo', 'apellido': 'Administrativo', 'rol': 'ADMINISTRATIVO'},
         ]
 
         for data in usuarios_data:
