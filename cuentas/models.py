@@ -1,5 +1,10 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
+
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -19,7 +24,7 @@ class UsuarioManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    ROLES = [
+    ROLES = [  # noqa: RUF012
         ('SUPERADMIN', 'Super Usuario / Admin'),
         ('RECTOR', 'Rector'),
         ('SECRETARIA', 'Secretaría'),
@@ -43,7 +48,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nombre', 'apellido']
+    REQUIRED_FIELDS = ['nombre', 'apellido']  # noqa: RUF012
 
     def __str__(self):
         return f"{self.apellido}, {self.nombre} ({self.get_rol_display()})"
