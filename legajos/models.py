@@ -2,8 +2,9 @@
 
 from django.db import models
 
+
 class Docente(models.Model):
-    TIPO_DOCUMENTO_CHOICES = [
+    TIPO_DOCUMENTO_CHOICES = [  # noqa: RUF012
         ('DNI', 'DNI'),
         ('LC', 'Libreta Cívica'),
         ('LE', 'Libreta de Enrolamiento'),
@@ -20,7 +21,7 @@ class Docente(models.Model):
     fecha_nacimiento = models.DateField(blank=True, null=True)
     
     # Estado del legajo institucional
-    ESTADO_CHOICES = [
+    ESTADO_CHOICES = [  # noqa: RUF012
         ('ACTIVO', 'Activo'),
         ('EN_REVISION', 'En revisión'),
         ('INACTIVO', 'Inactivo'),
@@ -54,7 +55,7 @@ class Documento(models.Model):
         return f"{self.get_tipo_display()} - {self.docente.apellido}"
 
 class CargoDocente(models.Model):
-    TIPO_CARGO_CHOICES = [
+    TIPO_CARGO_CHOICES = [  # noqa: RUF012
         ('TC', 'Tiempo Completo (36 hs)'),
         ('TP1', 'Tiempo Parcial 1 (30 hs)'),
         ('TP2', 'Tiempo Parcial 2 (24 hs)'),
@@ -64,13 +65,13 @@ class CargoDocente(models.Model):
         ('OTRO', 'Otro Cargo / Conducción'),
     ]
 
-    CONDICION_CHOICES = [
+    CONDICION_CHOICES = [  # noqa: RUF012
         ('TITULAR', 'Titular'),
         ('INTERINO', 'Interino'),
         ('SUPLENTE', 'Suplente'),
     ]
 
-    TURNO_CHOICES = [
+    TURNO_CHOICES = [  # noqa: RUF012
         ('MANANA', 'Mañana'),
         ('TARDE', 'Tarde'),
         ('VESPERTINO', 'Vespertino'),
