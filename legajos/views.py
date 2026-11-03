@@ -1,14 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from .models import Docente, Documento, CargoDocente
-from .forms import DocenteForm, DocumentoForm, CargoForm
 from django.db.models import Q
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from .forms import CargoForm, DocenteForm, DocumentoForm
+from .models import CargoDocente, Docente, Documento
+
 
 class DocenteListView(LoginRequiredMixin, ListView):
     model = Docente
