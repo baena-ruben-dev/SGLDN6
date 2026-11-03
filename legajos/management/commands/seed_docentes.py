@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from legajos.models import Docente
 
+
 class Command(BaseCommand):
     help = 'Crea docentes de demostración para el sistema SGLD'
 
