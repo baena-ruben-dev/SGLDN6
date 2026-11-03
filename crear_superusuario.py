@@ -1,5 +1,5 @@
 import os
-import sys
+
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -7,6 +7,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 try:
     django.setup()
     from django.contrib.auth import get_user_model
+    
+    #Esto solo se va a ejecutar en RENDER
 
     User = get_user_model()
     EMAIL = 'admin@escuela.com'
@@ -38,5 +40,5 @@ try:
     else:
         print(f"Superusuario '{EMAIL}' ya existía, contraseña actualizada.")
         
-except Exception as e:
+except Exception as e:  # noqa: BLE001
     print(f"Error al configurar superusuario: {e}")
