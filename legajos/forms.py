@@ -1,11 +1,13 @@
 from django import forms
-from .models import Docente, Documento, CargoDocente
+
+from .models import CargoDocente, Docente, Documento
+
 
 class DocenteForm(forms.ModelForm):
     class Meta:
         model = Docente
-        fields = ['nombre', 'apellido', 'tipo_documento', 'numero_documento', 'cuil', 'email', 'telefono', 'fecha_nacimiento', 'estado']
-        widgets = {
+        fields = ['nombre', 'apellido', 'tipo_documento', 'numero_documento', 'cuil', 'email', 'telefono', 'fecha_nacimiento', 'estado']  # noqa: RUF012
+        widgets = {  # noqa: RUF012
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'apellido': forms.TextInput(attrs={'class': 'form-control'}),
             'tipo_documento': forms.Select(attrs={'class': 'form-select'}),
@@ -20,8 +22,8 @@ class DocenteForm(forms.ModelForm):
 class DocumentoForm(forms.ModelForm):
     class Meta:
         model = Documento
-        fields = ['titulo', 'tipo', 'archivo']
-        widgets = {
+        fields = ['titulo', 'tipo', 'archivo']  # noqa: RUF012
+        widgets = {  # noqa: RUF012
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Título de Grado Lic. en Sistemas'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'archivo': forms.FileInput(attrs={'class': 'form-control'}),
@@ -30,8 +32,8 @@ class DocumentoForm(forms.ModelForm):
 class CargoForm(forms.ModelForm):
     class Meta:
         model = CargoDocente
-        fields = ['tipo_cargo', 'espacio_curricular', 'horas_catedra', 'condicion', 'turno']
-        widgets = {
+        fields = ['tipo_cargo', 'espacio_curricular', 'horas_catedra', 'condicion', 'turno']  # noqa: RUF012
+        widgets = {  # noqa: RUF012
             'tipo_cargo': forms.Select(attrs={'class': 'form-select'}),
             'espacio_curricular': forms.TextInput(attrs={'class': 'form-control'}),
             'horas_catedra': forms.NumberInput(attrs={'class': 'form-control'}),
