@@ -1,14 +1,15 @@
 from django.urls import path
+
 from .views import (
-    DocenteListView,
-    DocenteDetailView,
+    CargoCreateView,
+    CargoDeleteView,
+    CargoUpdateView,
     DocenteCreateView,
+    DocenteDetailView,
+    DocenteListView,
     DocenteUpdateView,
     DocumentoCreateView,
     DocumentoDeleteView,
-    CargoCreateView,
-    CargoUpdateView,
-    CargoDeleteView,
     exportar_legajo_pdf,
 )
 
