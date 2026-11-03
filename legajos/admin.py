@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Docente, Documento, CargoDocente
+
+from .models import CargoDocente, Docente
+
 
 @admin.register(Docente)
 class DocenteAdmin(admin.ModelAdmin):
